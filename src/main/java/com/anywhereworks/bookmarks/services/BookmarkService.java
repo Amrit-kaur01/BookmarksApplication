@@ -1,15 +1,21 @@
-package com.example.TopicProject.services;
+package com.anywhereworks.bookmarks.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.example.TopicProject.entities.Topic;
+import com.anywhereworks.bookmarks.entities.Bookmark;
+import com.anywhereworks.bookmarks.exception.custom.BusinessException;
 
-public interface TopicService {
-	List<Topic> getAllTopics();
-	Optional<Topic> getTopic(String id);
-	Optional<Topic> getTopicByName(String name);
-	Topic addTopic(Topic topic);
-	Topic updateTopic(String id, Topic topic);
-	void deleteTopic(String id);
+public interface BookmarkService {
+	List<Bookmark> getAllBookmarks() throws BusinessException;
+
+	Bookmark getBookmark(String bookmarkId) throws BusinessException;
+
+	Bookmark addBookmark(Bookmark bookmark) throws BusinessException;
+
+	Bookmark updateBookmark(String bookmarkId, Bookmark bookmark) throws BusinessException;
+
+	void deleteBookmark(String bookmarkId) throws BusinessException;
+
+	List<Bookmark> addMultipleBookmarks(List<Bookmark> bookmarksList) throws BusinessException;
 }
