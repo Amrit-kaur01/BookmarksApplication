@@ -1,0 +1,19 @@
+server:
+ port: 9001
+ error:
+  include-stacktrace: NEVER
+
+spring:
+ dataSource:
+  url: jdbc:mysql://localhost:3306/bookmarks?useSSL=false
+  username: root
+  password: mYsql123
+ jpa:
+  database-platform: org.hibernate.dialect.MySQLDialect
+  hibernate:
+   ddl-auto: update
+  show-sql: true
+  properties:
+   hibernate:
+    format-sql: true
+   
