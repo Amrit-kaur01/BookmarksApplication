@@ -74,19 +74,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 	@Override
 	public void deleteBookmark(String id) throws BusinessException {
 
-		Bookmark bookmark = bookmarkRepository.findById(id).orElseThrow(
-				() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + id + " doesn't exists"));
+		bookmarkRepository.deleteById(id);
 
-		if (bookmark.getFolder() == null)
-			bookmarkRepository.deleteById(id);
-		else {
-			Folder folder = folderRepository.findById(String.valueOf(bookmark.getFolderId())).get();
-			folder.getBookmarksSet().remove(bookmark);
-			folder.decrementTotalBookmarks();
-			folderRepository.save(folder);
-			bookmarkRepository.deleteById(id);
-
-		}
 	}
 
 	@Override
