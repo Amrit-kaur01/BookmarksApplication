@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.anywhereworks.bookmarks.entities.Bookmark;
 import com.anywhereworks.bookmarks.entities.Folder;
 import com.anywhereworks.bookmarks.exception.custom.BusinessException;
+import com.anywhereworks.bookmarks.helpers.HelperClass;
 import com.anywhereworks.bookmarks.repositories.BookmarkRepository;
 import com.anywhereworks.bookmarks.repositories.FolderRepository;
 import com.anywhereworks.bookmarks.services.FolderService;
@@ -32,10 +33,8 @@ public class FolderServiceImpl implements FolderService {
 
 	@Override
 	public Folder addFolder(Folder folder) throws BusinessException {
-		if (folder.getName() == null)
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name cannot be null");
-		if (folder.getName().isBlank())
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name cannot be blank");
+		if (!HelperClass.validateAttribute(folder.getName()))
+			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name is invalid");
 		return folderRepository.save(folder);
 
 	}
@@ -43,10 +42,8 @@ public class FolderServiceImpl implements FolderService {
 	@Override
 	public Folder updateFolder(String folderId, Folder newFolder) throws BusinessException {
 
-		if (newFolder.getName() == null)
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name cannot be null");
-		if (newFolder.getName().isBlank())
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name cannot be blank");
+		if (!HelperClass.validateAttribute(newFolder.getName()))
+			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name is invalid");
 
 		return folderRepository.findById(folderId).map(folder -> {
 			folder.setName(newFolder.getName());

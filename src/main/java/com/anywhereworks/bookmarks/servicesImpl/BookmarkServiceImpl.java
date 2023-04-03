@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.anywhereworks.bookmarks.entities.Bookmark;
 import com.anywhereworks.bookmarks.entities.Folder;
 import com.anywhereworks.bookmarks.exception.custom.BusinessException;
+import com.anywhereworks.bookmarks.helpers.HelperClass;
 import com.anywhereworks.bookmarks.repositories.BookmarkRepository;
 import com.anywhereworks.bookmarks.repositories.FolderRepository;
 import com.anywhereworks.bookmarks.services.BookmarkService;
@@ -48,30 +49,25 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	public Bookmark addBookmark(Bookmark bookmark) throws BusinessException {
-		if (bookmark.getTitle() == null)
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title cannot be null");
-		if (bookmark.getTitle().isEmpty())
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title cannot be empty");
-		else
-			return bookmarkRepository.save(bookmark);
+		if (!HelperClass.validateAttribute(bookmark.getTitle()))
+			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title is invalid");
+
+		return bookmarkRepository.save(bookmark);
 
 	}
 
 	@Override
 	public Bookmark updateBookmark(String bookmarkId, Bookmark newBookmark) throws BusinessException {
 
-		if (newBookmark.getTitle() == null)
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title cannot be null");
-		if (newBookmark.getTitle().isEmpty())
-			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title cannot be empty");
-		else {
-			return bookmarkRepository.findById(bookmarkId).map(bookmark -> {
-				bookmark.setTitle(newBookmark.getTitle());
-				bookmark.setUrl(newBookmark.getUrl());
-				return bookmarkRepository.save(bookmark);
-			}).orElseThrow(
-					() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + bookmarkId + " not found"));
-		}
+		if (!HelperClass.validateAttribute(newBookmark.getTitle()))
+			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title is invalid");
+
+		return bookmarkRepository.findById(bookmarkId).map(bookmark -> {
+			bookmark.setTitle(newBookmark.getTitle());
+			bookmark.setUrl(newBookmark.getUrl());
+			return bookmarkRepository.save(bookmark);
+		}).orElseThrow(
+				() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + bookmarkId + " not found"));
 
 	}
 
