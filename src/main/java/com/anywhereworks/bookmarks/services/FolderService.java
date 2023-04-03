@@ -18,5 +18,5 @@ public interface FolderService {
 
 	Folder moveBookmarkToFolder(String folderId, String bookmarkId) throws BusinessException;
 
-	Set<Bookmark> findAllBookmarksById(String folderId) throws BusinessException;
+	Folder getFolder(String folderId) throws BusinessException;
 }

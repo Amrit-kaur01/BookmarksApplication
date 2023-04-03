@@ -26,10 +26,10 @@ public class FolderController {
 	@Autowired
 	private FolderService folderService;
 
-	@GetMapping("/{folderId}/bookmarks")
-	public ResponseEntity<Set<Bookmark>> findAllBookmarksById(@PathVariable String folderId) throws BusinessException {
-		Set<Bookmark> bookmarksSet = folderService.findAllBookmarksById(folderId);
-		return new ResponseEntity<>(bookmarksSet, HttpStatus.OK);
+	@GetMapping("/{folderId}")
+	public ResponseEntity<Folder> getFolder(@PathVariable String folderId) throws BusinessException {
+		Folder folder = folderService.getFolder(folderId);
+		return new ResponseEntity<>(folder, HttpStatus.OK);
 	}
 
 	@PutMapping("/{folderId}/bookmarks/{bookmarkId}")

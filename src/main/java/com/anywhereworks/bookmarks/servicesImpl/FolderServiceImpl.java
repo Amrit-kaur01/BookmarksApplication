@@ -86,8 +86,8 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public Set<Bookmark> findAllBookmarksById(String id) throws BusinessException {
-		return folderRepository.findById(id).map(folder -> folder.getBookmarksSet())
+	public Folder getFolder(String id) throws BusinessException {
+		return folderRepository.findById(id)
 				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + id + " not found"));
 
 	}
