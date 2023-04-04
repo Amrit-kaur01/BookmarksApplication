@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.anywhereworks.bookmarks.entities.Folder;
 
-public interface FolderRepository extends CrudRepository<Folder, String> {
+public interface FolderRepository extends CrudRepository<Folder, Long> {
 
 }

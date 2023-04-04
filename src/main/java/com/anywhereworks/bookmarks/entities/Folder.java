@@ -17,7 +17,7 @@ public class Folder {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int folderId;
+	private long folderId;
 
 	@Column(nullable = false)
 	private String name;
@@ -30,9 +30,9 @@ public class Folder {
 	public Folder() {
 	}
 
-	public Folder(int id, Set<Bookmark> bookmarksSet, String name) {
+	public Folder(long folderId, Set<Bookmark> bookmarksSet, String name) {
 		super();
-		this.folderId = id;
+		this.folderId = folderId;
 		this.bookmarksSet = bookmarksSet;
 		this.name = name;
 
@@ -46,11 +46,11 @@ public class Folder {
 		this.totalBookmarks = totalBookmarks;
 	}
 
-	public int getId() {
+	public long getFolderId() {
 		return folderId;
 	}
 
-	public void setId(int id) {
+	public void setFolderId(long id) {
 		this.folderId = id;
 	}
 

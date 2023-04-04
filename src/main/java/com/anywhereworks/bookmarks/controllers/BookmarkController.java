@@ -38,7 +38,7 @@ public class BookmarkController {
 	}
 
 	@GetMapping("/{bookmarkId}")
-	public ResponseEntity<Bookmark> getBookmark(@PathVariable String bookmarkId) throws BusinessException {
+	public ResponseEntity<Bookmark> getBookmark(@PathVariable Long bookmarkId) throws BusinessException {
 		Bookmark bookmark = bookmarkService.getBookmark(bookmarkId);
 		return new ResponseEntity<>(bookmark, HttpStatus.OK);
 	}
@@ -59,17 +59,17 @@ public class BookmarkController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Bookmark> updateBookmark(@RequestBody Bookmark bookmark, @PathVariable String id)
+	public ResponseEntity<Bookmark> updateBookmark(@RequestBody Bookmark bookmark, @PathVariable Long bookmarkId)
 			throws BusinessException {
-		Bookmark updatedBookmark = bookmarkService.updateBookmark(id, bookmark);
+		Bookmark updatedBookmark = bookmarkService.updateBookmark(bookmarkId, bookmark);
 
 		return new ResponseEntity<>(updatedBookmark, HttpStatus.OK);
 
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteBookmark(@PathVariable String id) throws BusinessException {
+	public ResponseEntity<Object> deleteBookmark(@PathVariable Long id) throws BusinessException {
 		bookmarkService.deleteBookmark(id);
-		return new ResponseEntity<>("Bookmark with id " + id + " deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>("Bookmark with id " + id + " deleted", HttpStatus.OK);
 	}
 }

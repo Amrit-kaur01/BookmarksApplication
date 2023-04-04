@@ -41,7 +41,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public Bookmark getBookmark(String bookmarkId) throws BusinessException {
+	public Bookmark getBookmark(Long bookmarkId) throws BusinessException {
 		return bookmarkRepository.findById(bookmarkId).orElseThrow(
 				() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + bookmarkId + " not found"));
 
@@ -57,7 +57,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public Bookmark updateBookmark(String bookmarkId, Bookmark newBookmark) throws BusinessException {
+	public Bookmark updateBookmark(Long bookmarkId, Bookmark newBookmark) throws BusinessException {
 
 		if (!HelperClass.validateAttribute(newBookmark.getTitle()))
 			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title is invalid");
@@ -72,9 +72,9 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public void deleteBookmark(String id) throws BusinessException {
+	public void deleteBookmark(Long bookmarkId) throws BusinessException {
 
-		bookmarkRepository.deleteById(id);
+		bookmarkRepository.deleteById(bookmarkId);
 
 	}
 
@@ -85,6 +85,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 			try {
 				bookmarks.add(addBookmark(bookmark));
 			} catch (BusinessException e) {
+				System.out.println(e);
 			}
 		});
 		return bookmarks;

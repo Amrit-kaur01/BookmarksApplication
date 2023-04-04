@@ -27,13 +27,13 @@ public class FolderController {
 	private FolderService folderService;
 
 	@GetMapping("/{folderId}")
-	public ResponseEntity<Folder> getFolder(@PathVariable String folderId) throws BusinessException {
+	public ResponseEntity<Folder> getFolder(@PathVariable Long folderId) throws BusinessException {
 		Folder folder = folderService.getFolder(folderId);
 		return new ResponseEntity<>(folder, HttpStatus.OK);
 	}
 
 	@PutMapping("/{folderId}/bookmarks/{bookmarkId}")
-	public ResponseEntity<Object> moveBookmarkToFolder(@PathVariable String folderId, @PathVariable String bookmarkId)
+	public ResponseEntity<Object> moveBookmarkToFolder(@PathVariable Long folderId, @PathVariable Long bookmarkId)
 			throws BusinessException {
 		Folder updatedFolder = folderService.moveBookmarkToFolder(folderId, bookmarkId);
 		return new ResponseEntity<>(updatedFolder, HttpStatus.OK);
@@ -47,7 +47,7 @@ public class FolderController {
 	}
 
 	@PutMapping("/{folderId}")
-	public ResponseEntity<Folder> updateFolder(@RequestBody Folder folder, @PathVariable String folderId)
+	public ResponseEntity<Folder> updateFolder(@RequestBody Folder folder, @PathVariable Long folderId)
 			throws BusinessException {
 		Folder updatedFolder = folderService.updateFolder(folderId, folder);
 
@@ -56,9 +56,9 @@ public class FolderController {
 	}
 
 	@DeleteMapping("/{folderId}")
-	public ResponseEntity<Object> deleteFolder(@PathVariable String folderId) throws BusinessException {
+	public ResponseEntity<Object> deleteFolder(@PathVariable Long folderId) throws BusinessException {
 		folderService.deleteFolder(folderId);
-		return new ResponseEntity<>("Folder with id " + folderId + " deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>("Folder with id " + folderId + " deleted", HttpStatus.OK);
 	}
 
 }

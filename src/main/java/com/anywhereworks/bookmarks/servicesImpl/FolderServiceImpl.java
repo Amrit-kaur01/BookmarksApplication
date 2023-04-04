@@ -40,7 +40,7 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public Folder updateFolder(String folderId, Folder newFolder) throws BusinessException {
+	public Folder updateFolder(Long folderId, Folder newFolder) throws BusinessException {
 
 		if (!HelperClass.validateAttribute(newFolder.getName()))
 			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name is invalid");
@@ -53,22 +53,19 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public void deleteFolder(String id) throws BusinessException {
-		if (!folderRepository.existsById(id))
-			throw new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + id + " doesn't exists");
-		else
-			folderRepository.deleteById(id);
+	public void deleteFolder(Long folderId) throws BusinessException {
+		folderRepository.deleteById(folderId);
 	}
 
 	@Override
-	public Folder moveBookmarkToFolder(String id, String bookmarkId) throws BusinessException {
+	public Folder moveBookmarkToFolder(Long id, Long bookmarkId) throws BusinessException {
 		Folder newFolder = folderRepository.findById(id)
 				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + id + " not found"));
 		Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(
 				() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + bookmarkId + " not found"));
 
 		if (bookmark.getFolder() != null) {
-			Folder previousFolder = folderRepository.findById(String.valueOf(bookmark.getFolderId())).get();
+			Folder previousFolder = folderRepository.findById(bookmark.getFolderId()).get();
 			previousFolder.getBookmarksSet().remove(bookmark);
 			previousFolder.decrementTotalBookmarks();
 			folderRepository.save(previousFolder);
@@ -83,9 +80,9 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public Folder getFolder(String id) throws BusinessException {
-		return folderRepository.findById(id)
-				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + id + " not found"));
+	public Folder getFolder(Long folderId) throws BusinessException {
+		return folderRepository.findById(folderId)
+				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + folderId + " not found"));
 
 	}
 

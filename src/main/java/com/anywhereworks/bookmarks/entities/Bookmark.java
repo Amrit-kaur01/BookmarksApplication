@@ -19,7 +19,7 @@ public class Bookmark {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int bookmarkId;
+	private long bookmarkId;
 
 	@Column(nullable = false)
 	private String title;
@@ -34,7 +34,7 @@ public class Bookmark {
 
 	}
 
-	public Bookmark(int bookmarkId, String title, String url) {
+	public Bookmark(long bookmarkId, String title, String url) {
 		super();
 		this.bookmarkId = bookmarkId;
 		this.title = title;
@@ -42,11 +42,11 @@ public class Bookmark {
 
 	}
 
-	public int getBookmarkId() {
+	public long getBookmarkId() {
 		return bookmarkId;
 	}
 
-	public void setBookmarkId(int bookmarkId) {
+	public void setBookmarkId(long bookmarkId) {
 		this.bookmarkId = bookmarkId;
 	}
 
@@ -74,9 +74,9 @@ public class Bookmark {
 		this.folder = folder;
 	}
 
-	public int getFolderId() {
+	public long getFolderId() {
 		if(folder!=null)
-			return folder.getId();
+			return folder.getFolderId();
 		return 0;
 	}
 

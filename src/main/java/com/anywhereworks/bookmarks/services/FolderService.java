@@ -12,11 +12,11 @@ public interface FolderService {
 
 	Folder addFolder(Folder folder) throws BusinessException;
 
-	Folder updateFolder(String folderId, Folder folder) throws BusinessException;
+	Folder updateFolder(Long folderId, Folder folder) throws BusinessException;
 
-	void deleteFolder(String folderId) throws BusinessException;
+	void deleteFolder(Long folderId) throws BusinessException;
 
-	Folder moveBookmarkToFolder(String folderId, String bookmarkId) throws BusinessException;
+	Folder moveBookmarkToFolder(Long folderId, Long bookmarkId) throws BusinessException;
 
-	Folder getFolder(String folderId) throws BusinessException;
+	Folder getFolder(Long folderId) throws BusinessException;
 }
