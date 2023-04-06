@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,120 +37,140 @@ class BookmarkServiceImplTest {
 
 	@Mock
 	private BookmarkRepository bookmarkRepository;
+	@InjectMocks
+	private BookmarkServiceImpl bookmarkServiceImpl;
 
-	private BookmarkService bookmarkService;
-	private Bookmark bookmark;
-
-	@BeforeEach
-	void setUp() {
-		bookmarkService = new BookmarkServiceImpl(bookmarkRepository);
-		bookmark = new Bookmark(1, "Java", "/java");
-
-	}
+	private static final Bookmark bookmark = new Bookmark(1, "Java", "/java");;
 
 	@Test
+	@DisplayName("Add the bookmark")
 	public void shouldAddBookmark() throws BusinessException {
+		// when
+		when(bookmarkRepository.save(bookmark)).thenReturn(bookmark);
 		
-		when(bookmarkRepository.save(bookmark)).thenReturn(bookmark);
-		assertThat(bookmarkService.addBookmark(bookmark)).isEqualTo(bookmark);
+		// then
+		assertThat(bookmarkServiceImpl.addBookmark(bookmark)).isEqualTo(bookmark);
 		verify(bookmarkRepository, times(1)).save(any(Bookmark.class));
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
-	public void shouldThrowException_WhileAdding_IfGivenNullTitle() {
-		Bookmark bookmarkWithNullTitle = new Bookmark();
-		assertThatThrownBy(() -> bookmarkService.addBookmark(bookmarkWithNullTitle))
-				.isInstanceOf(BusinessException.class).hasMessage("Title cannot be null");
+	@DisplayName("Throw exception while adding if given null or blank title")
+	public void shouldThrowExceptionWhileAddingIfGivenInvalidTitle() {
+		// given
+		Bookmark bookmarkWithInvalidTitle = new Bookmark();
+
+		// when-then
+		assertThatThrownBy(() -> bookmarkServiceImpl.addBookmark(bookmarkWithInvalidTitle))
+				.isInstanceOf(BusinessException.class).hasMessage("Title is invalid");
 		verify(bookmarkRepository, never()).save(any());
 	}
 
 	@Test
-	public void shouldThrowException_WhileAdding_IfGivenEmptyTitle() {
-		Bookmark bookmarkWithEmptyTitle = new Bookmark();
-		bookmarkWithEmptyTitle.setTitle("");
-		assertThatThrownBy(() -> bookmarkService.addBookmark(bookmarkWithEmptyTitle))
-				.isInstanceOf(BusinessException.class).hasMessage("Title cannot be empty");
-		verify(bookmarkRepository, never()).save(any());
-	}
-
-	@Test
+	@DisplayName("Update the bookmark with given id")
 	public void shouldUpdateBookmark() throws BusinessException {
-		when(bookmarkRepository.findById("1")).thenReturn(Optional.ofNullable(bookmark));
+		// given
+		long bookmarkId = bookmark.getBookmarkId();
+
+		// when
+		when(bookmarkRepository.findById(1L)).thenReturn(Optional.ofNullable(bookmark));
 		when(bookmarkRepository.save(bookmark)).thenReturn(bookmark);
-		assertThat(bookmarkService.updateBookmark("1",bookmark)).isEqualTo(bookmark);
+		assertThat(bookmarkServiceImpl.updateBookmark(1L, bookmark)).isEqualTo(bookmark);
+
+		// then
 		verify(bookmarkRepository, times(1)).save(any(Bookmark.class));
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
-	public void shouldThrowException_WhileUpdating_IfGivenNullTitle() {
-		Bookmark bookmarkWithNullTitle = new Bookmark();
-		assertThatThrownBy(() -> bookmarkService.updateBookmark("1", bookmarkWithNullTitle))
-				.isInstanceOf(BusinessException.class).hasMessage("Title cannot be null");
+	@DisplayName("Throw exception while updating if given null or blank title")
+	public void shouldThrowExceptionWhileUpdatingIfGivenInvalidTitle() {
+		// given
+		Bookmark bookmarkWithInvalidTitle = new Bookmark();
+
+		// when
+		assertThatThrownBy(() -> bookmarkServiceImpl.updateBookmark(1L, bookmarkWithInvalidTitle))
+				.isInstanceOf(BusinessException.class).hasMessage("Title is invalid");
+
+		// then
 		verify(bookmarkRepository, never()).save(any());
 	}
 
 	@Test
-	public void shouldThrowException_WhileUpdating_IfGivenEmptyTitle() {
-		Bookmark bookmarkWithEmptyTitle = new Bookmark();
-		bookmarkWithEmptyTitle.setTitle("");
-		assertThatThrownBy(() -> bookmarkService.updateBookmark("1", bookmarkWithEmptyTitle))
-				.isInstanceOf(BusinessException.class).hasMessage("Title cannot be empty");
-		verify(bookmarkRepository, never()).save(any());
-	}
+	@DisplayName("Throw exception while updating if bookmark with given id not found")
+	public void shouldThrowExceptionWhileUpdatingIfBookmarkNotFound() {
+		// given
+		long bookmarkId = 2L;
 
-	@Test
-	public void shouldThrowException_WhileUpdating_IfBookmarkNotFound() {
-		when(bookmarkRepository.findById("2")).thenReturn(Optional.empty());
-		assertThatThrownBy(() -> bookmarkService.updateBookmark("2", bookmark))
-				.isInstanceOf(BusinessException.class).hasMessage("Bookmark with id 2 not found");
-		verify(bookmarkRepository,times(1)).findById("2");
+		// when
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.empty());
+		assertThatThrownBy(() -> bookmarkServiceImpl.updateBookmark(bookmarkId, bookmark))
+				.isInstanceOf(BusinessException.class).hasMessage("Bookmark with id " + bookmarkId + " not found");
+
+		// then
+		verify(bookmarkRepository, times(1)).findById(2L);
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
+	@DisplayName("Get the bookmark with given id")
 	public void shouldGetBookmark() throws BusinessException {
-		when(bookmarkRepository.findById("1")).thenReturn(Optional.ofNullable(bookmark));
-		assertThat(bookmarkService.getBookmark("1")).isEqualTo(bookmark);
-		verify(bookmarkRepository,times(1)).findById("1");
+		// given
+		long bookmarkId = bookmark.getBookmarkId();
+
+		// when
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.ofNullable(bookmark));
+		assertThat(bookmarkServiceImpl.getBookmark(bookmarkId)).isEqualTo(bookmark);
+
+		// then
+		verify(bookmarkRepository, times(1)).findById(bookmarkId);
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
-	public void shouldThrowException_WhileGetting_IfBookmarkNotFound() {
-		when(bookmarkRepository.findById("2")).thenReturn(Optional.empty());
-		assertThatThrownBy(() -> bookmarkService.getBookmark("2"))
-				.isInstanceOf(BusinessException.class).hasMessage("Bookmark with id 2 not found");
-		verify(bookmarkRepository,times(1)).findById("2");
+	@DisplayName("Throw exception while geting if bookmark with given id not found")
+	public void shouldThrowExceptionWhileGettingIfBookmarkNotFound() {
+		// given
+		long bookmarkId = 2L;
+
+		// when
+		when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.empty());
+		assertThatThrownBy(() -> bookmarkServiceImpl.getBookmark(bookmarkId)).isInstanceOf(BusinessException.class)
+				.hasMessage("Bookmark with id " + bookmarkId + " not found");
+
+		// then
+		verify(bookmarkRepository, times(1)).findById(bookmarkId);
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
+	@DisplayName("Get all the bookmarks")
 	public void shouldGetAllBookmarks() throws BusinessException {
+		//when
 		when(bookmarkRepository.findAll()).thenReturn(new ArrayList<>(Collections.singleton(bookmark)));
-		assertThat(bookmarkService.getAllBookmarks().get(0)).isEqualTo(bookmark);
+		assertThat(bookmarkServiceImpl.getAllBookmarks().get(0)).isEqualTo(bookmark);
+		
+		// then
 		verify(bookmarkRepository,times(1)).findAll();
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
 	@Test
+	@DisplayName("Delete the bookmark with given id")
 	public void shouldDeleteBookmark() throws BusinessException {
 
-		when(bookmarkRepository.findById("1")).thenReturn(Optional.ofNullable(bookmark));
-		//doNothing().when(bookmarkRepository).deleteById("1");
-		bookmarkService.deleteBookmark("1");
-		verify(bookmarkRepository,times(1)).deleteById("1");
+		// stub
+		// doNothing().when(bookmarkRepository).deleteById("1");
+
+		// given
+		long bookmarkId = 1L;
+
+		// when
+		bookmarkServiceImpl.deleteBookmark(bookmarkId);
+
+		// then
+		verify(bookmarkRepository, times(1)).deleteById(bookmarkId);
 		verifyNoMoreInteractions(bookmarkRepository);
 	}
 
-	@Test
-	public void shouldThrowException_WhileDeleting_IfBookmarkNotFound() {
-
-		when(bookmarkRepository.findById("2")).thenReturn(Optional.empty());
-		assertThatThrownBy(() -> bookmarkService.deleteBookmark("2"))
-				.isInstanceOf(BusinessException.class).hasMessage("Bookmark with id 2 doesn't exists");
-		verify(bookmarkRepository,times(1)).findById("2");
-		verifyNoMoreInteractions(bookmarkRepository);
-	}
 }
