@@ -1,8 +1,9 @@
 package com.anywhereworks.bookmarks.entities;
 
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,9 +13,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "bookmarks")
+@Getter
+@Setter
 public class Bookmark {
 
 	@Id
@@ -75,9 +81,25 @@ public class Bookmark {
 	}
 
 	public long getFolderId() {
-		if(folder!=null)
+		if (folder != null)
 			return folder.getFolderId();
 		return 0;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Bookmark other = (Bookmark) obj;
+		return bookmarkId == other.bookmarkId && Objects.equals(folder, other.folder)
+				&& Objects.equals(title, other.title) && Objects.equals(url, other.url);
 	}
 
 }

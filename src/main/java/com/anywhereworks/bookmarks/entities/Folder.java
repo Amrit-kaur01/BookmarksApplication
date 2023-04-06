@@ -1,5 +1,6 @@
 package com.anywhereworks.bookmarks.entities;
 
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -76,6 +77,22 @@ public class Folder {
 
 	public void decrementTotalBookmarks() {
 		totalBookmarks--;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Folder other = (Folder) obj;
+		return Objects.equals(bookmarksSet, other.bookmarksSet) && folderId == other.folderId
+				&& Objects.equals(name, other.name) && totalBookmarks == other.totalBookmarks;
 	}
 
 }
