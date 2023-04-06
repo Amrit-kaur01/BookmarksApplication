@@ -1,18 +1,13 @@
 package com.anywhereworks.bookmarks.servicesImpl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.anywhereworks.bookmarks.entities.Bookmark;
-import com.anywhereworks.bookmarks.entities.Folder;
 import com.anywhereworks.bookmarks.exception.custom.BusinessException;
 import com.anywhereworks.bookmarks.helpers.HelperClass;
 import com.anywhereworks.bookmarks.repositories.BookmarkRepository;
@@ -21,16 +16,11 @@ import com.anywhereworks.bookmarks.services.BookmarkService;
 
 @Service
 public class BookmarkServiceImpl implements BookmarkService {
-
+	@Autowired
 	private BookmarkRepository bookmarkRepository;
 
 	@Autowired
 	private FolderRepository folderRepository;
-
-	@Autowired
-	public BookmarkServiceImpl(BookmarkRepository bookmarkRepository) {
-		this.bookmarkRepository = bookmarkRepository;
-	}
 
 	@Override
 	public List<Bookmark> getAllBookmarks() {
@@ -41,7 +31,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public Bookmark getBookmark(Long bookmarkId) throws BusinessException {
+	public Bookmark getBookmark(long bookmarkId) throws BusinessException {
 		return bookmarkRepository.findById(bookmarkId).orElseThrow(
 				() -> new BusinessException(HttpStatus.NOT_FOUND, "Bookmark with id " + bookmarkId + " not found"));
 
@@ -57,7 +47,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public Bookmark updateBookmark(Long bookmarkId, Bookmark newBookmark) throws BusinessException {
+	public Bookmark updateBookmark(long bookmarkId, Bookmark newBookmark) throws BusinessException {
 
 		if (!HelperClass.validateAttribute(newBookmark.getTitle()))
 			throw new BusinessException(HttpStatus.BAD_REQUEST, "Title is invalid");
@@ -72,7 +62,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public void deleteBookmark(Long bookmarkId) throws BusinessException {
+	public void deleteBookmark(long bookmarkId) throws BusinessException {
 
 		bookmarkRepository.deleteById(bookmarkId);
 

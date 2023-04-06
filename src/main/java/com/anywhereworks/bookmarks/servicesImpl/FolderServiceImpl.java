@@ -1,11 +1,5 @@
 package com.anywhereworks.bookmarks.servicesImpl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,15 +15,11 @@ import com.anywhereworks.bookmarks.services.FolderService;
 @Service
 public class FolderServiceImpl implements FolderService {
 
+	@Autowired
 	private FolderRepository folderRepository;
 
 	@Autowired
 	private BookmarkRepository bookmarkRepository;
-
-	@Autowired
-	public FolderServiceImpl(FolderRepository folderRepository) {
-		this.folderRepository = folderRepository;
-	}
 
 	@Override
 	public Folder addFolder(Folder folder) throws BusinessException {
@@ -40,7 +30,7 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public Folder updateFolder(Long folderId, Folder newFolder) throws BusinessException {
+	public Folder updateFolder(long folderId, Folder newFolder) throws BusinessException {
 
 		if (!HelperClass.validateAttribute(newFolder.getName()))
 			throw new BusinessException(HttpStatus.BAD_REQUEST, "Name is invalid");
@@ -53,12 +43,12 @@ public class FolderServiceImpl implements FolderService {
 	}
 
 	@Override
-	public void deleteFolder(Long folderId) throws BusinessException {
+	public void deleteFolder(long folderId) throws BusinessException {
 		folderRepository.deleteById(folderId);
 	}
 
 	@Override
-	public Folder moveBookmarkToFolder(Long id, Long bookmarkId) throws BusinessException {
+	public Folder moveBookmarkToFolder(long id, long bookmarkId) throws BusinessException {
 		Folder newFolder = folderRepository.findById(id)
 				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + id + " not found"));
 		Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(
@@ -76,13 +66,12 @@ public class FolderServiceImpl implements FolderService {
 		bookmark.setFolder(newFolder);
 		bookmarkRepository.save(bookmark);
 		return folderRepository.save(newFolder);
-
 	}
 
 	@Override
-	public Folder getFolder(Long folderId) throws BusinessException {
-		return folderRepository.findById(folderId)
-				.orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + folderId + " not found"));
+	public Folder getFolder(long folderId) throws BusinessException {
+		return folderRepository.findById(folderId).orElseThrow(
+				() -> new BusinessException(HttpStatus.NOT_FOUND, "Folder with id " + folderId + " not found"));
 
 	}
 
