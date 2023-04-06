@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,7 @@ public class BookmarkController {
 	}
 
 	@GetMapping("/{bookmarkId}")
-	public ResponseEntity<Bookmark> getBookmark(@PathVariable Long bookmarkId) throws BusinessException {
+	public ResponseEntity<Bookmark> getBookmark(@PathVariable long bookmarkId) throws BusinessException {
 		Bookmark bookmark = bookmarkService.getBookmark(bookmarkId);
 		return new ResponseEntity<>(bookmark, HttpStatus.OK);
 	}
@@ -58,8 +59,8 @@ public class BookmarkController {
 
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Bookmark> updateBookmark(@RequestBody Bookmark bookmark, @PathVariable Long bookmarkId)
+	@PutMapping("/{bookmarkId}")
+	public ResponseEntity<Bookmark> updateBookmark(@RequestBody Bookmark bookmark, @PathVariable long bookmarkId)
 			throws BusinessException {
 		Bookmark updatedBookmark = bookmarkService.updateBookmark(bookmarkId, bookmark);
 
@@ -68,7 +69,7 @@ public class BookmarkController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteBookmark(@PathVariable Long id) throws BusinessException {
+	public ResponseEntity<Object> deleteBookmark(@PathVariable long id) throws BusinessException {
 		bookmarkService.deleteBookmark(id);
 		return new ResponseEntity<>("Bookmark with id " + id + " deleted", HttpStatus.OK);
 	}
