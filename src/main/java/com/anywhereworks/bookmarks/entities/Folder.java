@@ -1,7 +1,10 @@
 package com.anywhereworks.bookmarks.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,10 +14,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "folders")
-public class Folder {
+public class Folder implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,9 +39,9 @@ public class Folder {
 	private Set<Bookmark> bookmarksSet;
 
 	private int totalBookmarks;
-
-	public Folder() {
-	}
+	
+	@Version
+	private long version;
 
 	public Folder(long folderId, Set<Bookmark> bookmarksSet, String name) {
 		super();
@@ -37,38 +49,6 @@ public class Folder {
 		this.bookmarksSet = bookmarksSet;
 		this.name = name;
 
-	}
-
-	public int getTotalBookmarks() {
-		return totalBookmarks;
-	}
-
-	public void setTotalBookmarks(int totalBookmarks) {
-		this.totalBookmarks = totalBookmarks;
-	}
-
-	public long getFolderId() {
-		return folderId;
-	}
-
-	public void setFolderId(long id) {
-		this.folderId = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Set<Bookmark> getBookmarksSet() {
-		return bookmarksSet;
-	}
-
-	public void setBookmarksSet(Set<Bookmark> bookmarksSet) {
-		this.bookmarksSet = bookmarksSet;
 	}
 
 	public void incrementTotalBookmarks() {
