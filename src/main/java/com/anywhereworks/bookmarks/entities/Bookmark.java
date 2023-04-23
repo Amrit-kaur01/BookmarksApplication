@@ -1,5 +1,6 @@
 package com.anywhereworks.bookmarks.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -14,14 +15,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "bookmarks")
 @Getter
 @Setter
-public class Bookmark {
+@NoArgsConstructor
+@Entity
+@Table(name = "bookmarks")
+public class Bookmark implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -36,48 +41,12 @@ public class Bookmark {
 	@JsonIgnore
 	private Folder folder;
 
-	public Bookmark() {
-
-	}
-
 	public Bookmark(long bookmarkId, String title, String url) {
 		super();
 		this.bookmarkId = bookmarkId;
 		this.title = title;
 		this.url = url;
 
-	}
-
-	public long getBookmarkId() {
-		return bookmarkId;
-	}
-
-	public void setBookmarkId(long bookmarkId) {
-		this.bookmarkId = bookmarkId;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public Folder getFolder() {
-		return folder;
-	}
-
-	public void setFolder(Folder folder) {
-		this.folder = folder;
 	}
 
 	public long getFolderId() {
