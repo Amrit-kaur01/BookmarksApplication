@@ -26,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "folders")
-public class Folder implements Serializable{
+public class Folder implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -39,7 +39,7 @@ public class Folder implements Serializable{
 	private Set<Bookmark> bookmarksSet;
 
 	private int totalBookmarks;
-	
+
 	@Version
 	private long version;
 
