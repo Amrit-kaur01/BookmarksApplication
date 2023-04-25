@@ -24,13 +24,6 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity(errorResponse, businessException.getHttpStatus());
 	}
 	
-	@ExceptionHandler(value = SQLException.class)
-	public ResponseEntity<Object> handleSQLException(SQLException sqlException) {
-		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT,
-				sqlException.getMessage(), LocalDateTime.now());
-		return new ResponseEntity(errorResponse, HttpStatus.CONFLICT);
-	}
-	
 	@ExceptionHandler(value = OptimisticLockException.class)
 	public ResponseEntity<Object> handleOptimisticLockException(BusinessException optimisticLockException) {
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.CONFLICT,
