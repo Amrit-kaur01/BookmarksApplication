@@ -16,17 +16,22 @@ import com.anywhereworks.bookmarks.services.AuthenticationService;
 
 @RestController
 public class AuthenticationController {
-	
+
 	@Autowired
 	private AuthenticationService authenticationService;
 
 	@PostMapping("/register")
-	public ResponseEntity<UserResponse> register(@RequestBody UserCredentials userCredentials) {
-		return 	new ResponseEntity<>(authenticationService.register(userCredentials),HttpStatus.CREATED);
+	public ResponseEntity<UserResponse> register(@RequestBody UserCredentials userCredentials) throws BusinessException {
+		User user = authenticationService.register(userCredentials);
+		UserResponse userResponse = UserResponse.builder().username(user.getUsername()).id(user.getId()).build();
+		return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
 	}
-	
+
 	@PostMapping("/authenticate")
-	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody UserCredentials userCredentials) throws BusinessException {
-		return new ResponseEntity<>(authenticationService.authenticate(userCredentials),HttpStatus.OK);
+	public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody UserCredentials userCredentials)
+			throws BusinessException {
+		String jwtToken = authenticationService.authenticate(userCredentials);
+		AuthenticationResponse authenticationResponse = AuthenticationResponse.builder().token(jwtToken).build();
+		return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
 	}
 }

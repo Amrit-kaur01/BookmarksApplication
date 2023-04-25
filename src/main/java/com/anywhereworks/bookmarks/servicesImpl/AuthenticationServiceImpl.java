@@ -35,27 +35,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private AuthenticationManager authenticationManager;
 
 	@Override
-	public UserResponse register(UserCredentials userCredentials) {
+	public User register(UserCredentials userCredentials) throws BusinessException {
 		var user = User.builder().username(userCredentials.getUsername())
 				.password(passwordEncoder.encode(userCredentials.getPassword())).role(Role.USER).build();
-		userRepository.save(user);
-		UserResponse userResponse = UserResponse.builder().username(user.getUsername()).id(user.getId()).build();
-		return userResponse;
+		if(userRepository.findByUsername(user.getUsername()).isPresent())
+			throw new BusinessException(HttpStatus.CONFLICT,"Username already taken");
+		return userRepository.save(user);
 	}
 
 	@Override
-	public AuthenticationResponse authenticate(UserCredentials userCredentials) throws BusinessException {
+	public String authenticate(UserCredentials userCredentials) throws BusinessException {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userCredentials.getUsername(),
 					userCredentials.getPassword()));
 
 		} catch (BadCredentialsException exception) {
-			throw new BusinessException(HttpStatus.UNAUTHORIZED, "Incorrect username/password");
+			throw new BusinessException(HttpStatus.BAD_REQUEST, "Incorrect username/password");
 		}
 
 		var user = userRepository.findByUsername(userCredentials.getUsername()).get();
-		String jwtToken = jwtService.generateToken(user);
-		return AuthenticationResponse.builder().token(jwtToken).build();
+		return jwtService.generateToken(user);
+
 	}
 
 }

@@ -8,8 +8,8 @@ import com.anywhereworks.bookmarks.models.UserResponse;
 
 public interface AuthenticationService {
 
-	public UserResponse register(UserCredentials userCredentials);
+	public User register(UserCredentials userCredentials) throws BusinessException;
 
-	public AuthenticationResponse authenticate (UserCredentials userCredentials) throws BusinessException;
+	public String authenticate (UserCredentials userCredentials) throws BusinessException;
 
 }
