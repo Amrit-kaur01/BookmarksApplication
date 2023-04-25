@@ -13,7 +13,8 @@ import jakarta.transaction.Transactional;
 
 public interface FolderRepository extends CrudRepository<Folder, Long> {
 
-	@Modifying @Transactional
+	@Modifying
+	@Transactional
 	@Query("update Bookmark b set b.folder = (select f from Folder f where f.folderId=folderId) where b.bookmarkId = bookmarkId")
-	public void moveBookmarkToFolder(@Param("folderId") Long folderId,@Param("bookmarkId") Long bookmarkId);
+	public void moveBookmarkToFolder(@Param("folderId") long folderId, @Param("bookmarkId") Long bookmarkId);
 }
