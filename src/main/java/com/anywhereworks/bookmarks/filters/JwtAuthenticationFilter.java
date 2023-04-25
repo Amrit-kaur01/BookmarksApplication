@@ -1,4 +1,4 @@
-package com.anywhereworks.bookmarks.config;
+package com.anywhereworks.bookmarks.filters;
 
 import java.io.IOException;
 
