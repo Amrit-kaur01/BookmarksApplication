@@ -5,7 +5,7 @@ server:
 
 spring:
  dataSource:
-  url: jdbc:mysql://localhost:3306/bookmarks?useSSL=false
+  url: jdbc:mysql://localhost:3306/bookmarks?useSSL=true
   username: root
   password: mYsql123
  jpa:
@@ -16,4 +16,10 @@ spring:
   properties:
    hibernate:
     format-sql: true
+ cache:
+  cache-names: bookmarks, folders
+  redis:
+   time-to-live: 120000
+   cache-null-values: false
+ 
    
