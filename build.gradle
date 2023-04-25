@@ -21,8 +21,17 @@ dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 	testImplementation 'org.mockito:mockito-core:5.2.0'
 	runtimeOnly 'com.h2database:h2'
-	compileOnly 'org.projectlombok:lombok'
-  	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+  	implementation 'org.springframework.boot:spring-boot-starter-security'
+  	testImplementation 'org.springframework.security:spring-security-test'
+  	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+  	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+  	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+  	implementation 'org.springframework:spring-aspects:6.0.8'
+  	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.6'
+	
 }
 
 tasks.named('test') {
