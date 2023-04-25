@@ -10,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.anywhereworks.bookmarks.filters.JwtAuthenticationFilter;
 import com.mysql.cj.protocol.AuthenticationProvider;
 
 @Configuration
@@ -20,15 +21,13 @@ public class SecurityConfiguration {
 	private DaoAuthenticationProvider authenticationProvider;
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthFilter;
-	@Autowired
-	private AuthenticationEntryPoint authenticationEntryPoint;
-
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeHttpRequests().requestMatchers("/authenticate", "/register").permitAll()
 				.anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().httpBasic()
-				.authenticationEntryPoint(authenticationEntryPoint).and().authenticationProvider(authenticationProvider)
+				.and().authenticationProvider(authenticationProvider)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
